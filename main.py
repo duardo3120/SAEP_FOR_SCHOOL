@@ -74,11 +74,11 @@ def main():
             system.register_falta(matricula, codigo)
 
         elif opcao == "8":
-            for turma in system.turmas:
-                turma.exibir_turma()
+            for turma in system.turmas.values():
+                turma.exibir_turma() #Adicionado .values() para iterar sobre os valores do dicionário
 
         elif opcao == "9":
-            for aluno in system.alunos:
+            for aluno in system.alunos.values(): #Adicionado .values() para iterar sobre os valores do dicionário
                 aluno.exibir_aluno()
 
         elif opcao == "0":

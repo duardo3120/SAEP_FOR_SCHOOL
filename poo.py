@@ -41,50 +41,47 @@ class Disciplina:
 # Classe Sistema
 class System:
     def __init__(self):
-        self.turmas = []
-        self.alunos = []
-        self.disciplinas = []
+        self.turmas = {}
+        self.alunos = {}
+        self.disciplinas = {}
 
     # Metodo para criar turmas
     def create_turma(self, tipo_ensino, ano, turma, capacidade):
-        if self.find_turma(tipo_ensino, ano, turma): #Verifica se a turma/ano/turma existe, é necessário o if vir antes da criação da nova turma para validação
-            print("Turma já existe, por favor incluir nova turma!")
+        chave = (tipo_ensino, ano, turma) # Adicionado tupla como chave para evitar duplicatas
+        if chave in self.turmas:  # já existe
+            print(f"Erro: a turma {ano}-{turma} do {tipo_ensino} já existe.")
             return
         new_turma = Turma(tipo_ensino, ano, turma, capacidade)
-        self.turmas.append(new_turma)
+        self.turmas[chave] = new_turma
         print(f"Turma criada com sucesso: {ano}-{turma} com capacidade: {capacidade}")
+
 
     # Metodo para cadastrar alunos
     def register_aluno(self, nome, matricula, idade):
-        if self.find_aluno(matricula): #Verifica se o aluno/matricula existe, é necessário o if vir antes da criação do novo aluno para validação
+        if matricula in self.alunos: #Verifica se a matricula existe, é necessário o if vir antes da criação do novo aluno para validação
             print("Aluno já existe, por favor incluir nova matricula!")
             return
         new_aluno = Aluno(nome, matricula, idade)
-        self.alunos.append(new_aluno)
+        self.alunos[matricula] = new_aluno #Usa a matricula como chave no dicionario
         print(f"Aluno cadastrado com sucesso: {nome}, Matricula: {matricula}, Idade: {idade}")
 
     #Metodo para registrar disciplinas
     def register_disciplina(self, nome, codigo):
-        if self.find_disciplina(codigo): #Verifica se a disciplina/codigo existe, é necessário o if vir antes da criação da nova disciplina para validação
+        if codigo in self.disciplinas: #Verifica se o codigo existe, é necessário o if vir antes da criação da nova disciplina para validação
             print("Disciplina já existe, por favor incluir novo código!")
             return
         new_disciplina = Disciplina(nome, codigo)
-        self.disciplinas.append(new_disciplina)
+        self.disciplinas[codigo] = new_disciplina #Usa o codigo como chave no dicionario
         print(f"Disciplina cadastrada com sucesso: {nome}, Codigo: {codigo}")
 
     #Metodo para procurar o aluno e realizar validações
     def find_aluno(self, matricula):
-        for aluno in self.alunos:
-            if aluno.matricula == matricula:
-                return aluno
-        return None
+        return self.alunos.get(matricula, None) #Retorna none caso não encontre o aluno
 
     #Metodo para realizar a busca de turmas
     def find_turma(self, tipo_ensino, ano, turma):
-        for t in self.turmas:
-            if t.tipo_ensino == tipo_ensino and t.ano == ano and t.turma == turma:
-                return t
-        return None
+        return self.turmas.get((tipo_ensino, ano, turma))  # retorna None se não achar
+
 
     #Metodo para realizar a busca de disciplinas
     def find_disciplina(self, codigo):
