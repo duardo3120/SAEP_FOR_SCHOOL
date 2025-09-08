@@ -1,5 +1,6 @@
 from poo import System
 
+#Função responsável pela exibição do menu
 def menu():
     print("\n=== SAEP ===")
     print("1 - Criar Turma")
@@ -14,6 +15,7 @@ def menu():
     print("0 - Sair")
     return input("Escolha uma opção: ")
 
+#Função principal do sistema
 def main():
     system = System()
     while True:
@@ -23,12 +25,13 @@ def main():
             ensino = input("Tipo de Ensino (Fundamental/Médio): ")
             ano = input("Ano: ")
             turma = input("Turma: ")
-            try:
+            try: #Tentar realizar a conversão para int
                 capacidade = int(input("Capacidade: "))
-            except ValueError:
+            except ValueError: #Em caso de erro informar ao usuário
                 print("Capacidade deve ser número inteiro!")
                 continue
             system.create_turma(ensino, ano, turma, capacidade)
+            
 
         elif opcao == "2":
             nome = input("Nome do aluno: ")
@@ -58,9 +61,9 @@ def main():
         elif opcao == "6":
             matricula = input("Matrícula do aluno: ")
             codigo = input("Código da disciplina: ")
-            try:
+            try: #Tentar realizar a conversão para float
                 nota = float(input("Nota: "))
-            except ValueError:
+            except ValueError: #Em caso de erro informar ao usuário
                 print("Nota deve ser número válido!")
                 continue
             system.register_nota(matricula, codigo, nota)
@@ -85,5 +88,5 @@ def main():
         else:
             print("Opção inválida! Tente novamente.")
 
-if __name__ == "__main__":
-    main()
+if __name__ == "__main__": #Verifica se o script está sendo executado diretamente
+    main() #Executa a função principal
