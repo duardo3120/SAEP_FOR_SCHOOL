@@ -1,0 +1,35 @@
+{
+    "alunos": {
+        "1": {
+            "nome": "Eduardo",
+            "idade": "12",
+            "desempenho": {
+                "1": {
+                    "notas": [
+                        10.0
+                    ],
+                    "faltas": 1
+                }
+            }
+        }
+    },
+    "disciplinas": {
+        "1": {
+            "nome": "Por"
+        }
+    },
+    "turmas": {
+        "('Medio', '1', 'A')": {
+            "tipo_ensino": "Medio",
+            "ano": "1",
+            "turma": "A",
+            "capacidade": 20,
+            "alunos": [
+                "1"
+            ],
+            "disciplinas": [
+                "1"
+            ]
+        }
+    }
+}

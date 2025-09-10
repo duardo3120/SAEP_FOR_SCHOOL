@@ -18,6 +18,7 @@ def menu():
 #Função principal do sistema
 def main():
     system = System()
+    system.carregar_dados() #Carrega os dados ao iniciar o sistema
     while True:
         opcao = menu()
 
@@ -83,6 +84,7 @@ def main():
 
         elif opcao == "0":
             print("Encerrando o sistema...")
+            system.salvar_dados() #Salva os dados antes de
             break
 
         else:

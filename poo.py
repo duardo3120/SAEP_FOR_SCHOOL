@@ -1,3 +1,5 @@
+import json
+
 # Classe Turma com parametros do tipo de ensino, ano, turma e capacidade
 class Turma:
     def __init__(self, tipo_ensino, ano, turma, capacidade):
@@ -45,6 +47,76 @@ class System:
         self.alunos = {}
         self.disciplinas = {}
 
+    def salvar_dados(self, arquivo="dados.json"): #Metodo para salvar os dados em um arquivo JSON, parametros de alunos,disciplinas e turmas
+        dados = {
+            "alunos": {mat: {"nome": a.nome, "idade": a.idade, "desempenho": a.desempenho} 
+                   for mat, a in self.alunos.items()},
+            "disciplinas": {cod: {"nome": d.nome} for cod, d in self.disciplinas.items()},
+            "turmas": {str(chave): {
+                        "tipo_ensino": t.tipo_ensino,
+                        "ano": t.ano,
+                        "turma": t.turma,
+                        "capacidade": t.capacidade,
+                        "alunos": [a.matricula for a in t.lista_alunos],
+                        "disciplinas": [d.codigo for d in t.lista_disciplinas]
+                    } for chave, t in self.turmas.items()}
+        }
+        with open(arquivo, 'w', encoding="utf-8") as f: #Abrir o arquivo em modo escrita
+            json.dump(dados, f, indent=4, ensure_ascii=False) #Conversão de objeto python para JSON
+
+    def carregar_dados(self, arquivo="dados.json"):
+        try:
+            with open(arquivo, "r", encoding="utf-8") as f:
+                dados = json.load(f)
+        except FileNotFoundError:
+            print("Arquivo de dados não encontrado, iniciando com dados vazios.")
+            return
+
+    # Recriar alunos
+        self.alunos = {}
+        for mat, info in dados.get("alunos", {}).items():
+            aluno = Aluno(info["nome"], mat, info["idade"])
+            aluno.desempenho = info["desempenho"]
+            self.alunos[mat] = aluno
+        print(f"Alunos carregados: {list(self.alunos.keys())}")
+
+    # Recriar disciplinas
+        self.disciplinas = {}
+        for cod, info in dados.get("disciplinas", {}).items():
+            disciplina = Disciplina(info["nome"], cod)
+            self.disciplinas[cod] = disciplina
+        print(f"Disciplinas carregadas: {list(self.disciplinas.keys())}")
+
+    # Recriar turmas
+        self.turmas = {}
+        for chave_str, info in dados.get("turmas", {}).items():
+        # chave original era uma tupla, aqui armazenada como string
+            chave = (info["tipo_ensino"], info["ano"], info["turma"])
+            turma = Turma(info["tipo_ensino"], info["ano"], info["turma"], info["capacidade"])
+
+        # Associar alunos já criados
+        for mat in info.get("alunos", []):
+            print(f"Tentando associar aluno {mat} na turma {info['ano']}-{info['turma']}")
+            if mat in self.alunos:
+                turma.lista_alunos.append(self.alunos[mat])
+                print(f" -> Associado: {self.alunos[mat].nome}")
+            else:
+                print(f" -> Matrícula {mat} não encontrada em self.alunos")
+
+        # Associar disciplinas já criadas
+        for cod in info.get("disciplinas", []):
+            print(f"Tentando associar disciplina {cod} na turma {info['ano']}-{info['turma']}")
+            if cod in self.disciplinas:
+                turma.lista_disciplinas.append(self.disciplinas[cod])
+                print(f" -> Associada: {self.disciplinas[cod].nome}")
+            else:
+                print(f" -> Código {cod} não encontrado em self.disciplinas")
+
+        self.turmas[chave] = turma
+
+    print("Dados carregados com sucesso!")
+
+
     # Metodo para criar turmas
     def create_turma(self, tipo_ensino, ano, turma, capacidade):
         chave = (tipo_ensino, ano, turma) # Adicionado tupla como chave para evitar duplicatas
@@ -85,10 +157,7 @@ class System:
 
     #Metodo para realizar a busca de disciplinas
     def find_disciplina(self, codigo):
-        for d in self.disciplinas:
-            if d.codigo == codigo:
-                return d
-        return None
+        return self.disciplinas.get(codigo) #Refatorando o método para usar get do dicionário
 
     #Metodo para matricular alunos em turmas
     def matricular_aluno(self, matricula, tipo_ensino, ano, turma):
