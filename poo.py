@@ -212,3 +212,49 @@ class System:
                 print("Disciplina não encontrada para este aluno.")
         else:
             print("Aluno não encontrado, por favor verificar!")
+
+    def remove_aluno(self, matricula, tipo_ensino, ano, turma):
+        aluno = self.find_aluno(matricula)
+        turma_obj = self.find_turma(tipo_ensino, ano, turma)
+        if aluno and turma_obj:
+            if aluno in turma_obj.lista_alunos:
+                turma_obj.lista_alunos.remove(aluno)
+                # opcional: remover desempenho relacionado a essa turma
+                for disciplina in turma_obj.lista_disciplinas:
+                    if disciplina.codigo in aluno.desempenho:
+                        del aluno.desempenho[disciplina.codigo]
+                print(f"Aluno {aluno.nome} removido da turma {turma_obj.ano}-{turma_obj.turma}")
+            else:
+                print("Aluno não está matriculado nesta turma.")
+        else:
+            print("Aluno ou turma não encontrada, por favor verificar!")
+
+    def remove_disciplina(self, codigo, tipo_ensino, ano, turma):
+            disciplina = self.find_disciplina(codigo)
+            turma_obj = self.find_turma(tipo_ensino, ano, turma)
+            if disciplina and turma_obj:
+                if disciplina in turma_obj.lista_disciplinas:
+                    turma_obj.lista_disciplinas.remove(disciplina)
+                    # opcional: remover desempenho relacionado a essa disciplina
+                    for aluno in turma_obj.lista_alunos:
+                        if codigo in aluno.desempenho:
+                            del aluno.desempenho[codigo]
+                    print(f"Disciplina {disciplina.nome} removida da turma {turma_obj.ano}-{turma_obj.turma}")
+                else:
+                    print("Disciplina não está associada a esta turma.")
+            else:
+                print("Disciplina ou turma não encontrada, por favor verificar!")
+
+    def remove_turma(self, tipo_ensino, ano, turma):
+        chave = (tipo_ensino, ano, turma)
+        turma_obj = self.find_turma(tipo_ensino, ano, turma)
+        if turma_obj:
+            # opcional: limpar desempenho dos alunos relacionados a essa turma
+            for aluno in turma_obj.lista_alunos:
+                for disciplina in turma_obj.lista_disciplinas:
+                    if disciplina.codigo in aluno.desempenho:
+                        del aluno.desempenho[disciplina.codigo]
+            del self.turmas[chave]
+            print(f"Turma {ano}-{turma} removida com sucesso.")
+        else:
+            print("Turma não encontrada, por favor verificar!")
