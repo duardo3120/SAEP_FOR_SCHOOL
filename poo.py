@@ -258,3 +258,23 @@ class System:
             print(f"Turma {ano}-{turma} removida com sucesso.")
         else:
             print("Turma não encontrada, por favor verificar!")
+
+    def update_aluno(self, matricula, novo_nome=None, nova_idade=None):
+        aluno = self.find_aluno(matricula)
+        if aluno:
+            if novo_nome:
+                aluno.nome = novo_nome
+            if nova_idade:
+                aluno.idade = nova_idade
+            print(f"Dados do aluno {matricula} atualizados com sucesso.")
+        else:
+            print("Aluno não encontrado, por favor verificar!")
+
+    def update_disciplina(self, codigo, novo_nome=None):
+        disciplina = self.find_disciplina(codigo)
+        if disciplina:
+            if novo_nome:
+                disciplina.nome = novo_nome
+            print(f"Dados da disciplina {codigo} atualizados com sucesso.")
+        else:
+            print("Disciplina não encontrada, por favor verificar!")

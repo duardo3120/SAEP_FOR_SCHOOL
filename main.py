@@ -15,6 +15,8 @@ def menu():
     print("10 - Remover aluno")
     print("11 - Remover disciplina")
     print("12 - Remover turma")
+    print("13 - Atualizar dados do aluno")
+    print("14 - Atualizar dados da disciplina")
     print("0 - Sair")
     return input("Escolha uma opção: ")
 
@@ -107,6 +109,19 @@ def main():
             turma = input("Turma: ")
             system.remove_turma(tipo_ensino, ano, turma)
             print(f"Turma {turma} do ano {ano} removida.")
+
+        elif opcao == "13":
+            matricula = input("Matrícula do aluno a ser atualizado: ")
+            novo_nome = input("Novo nome: ")
+            nova_idade = input("Nova idade: ")
+            system.update_aluno(matricula, novo_nome if novo_nome else None, nova_idade if nova_idade else None)
+            print(f"Dados do aluno com matrícula {matricula} atualizados.")
+
+        elif opcao == "14":
+            codigo = input("Código da disciplina a ser atualizado: ")
+            novo_nome = input("Novo nome: ")
+            system.update_disciplina(codigo, novo_nome if novo_nome else None)
+            print(f"Dados da disciplina com código {codigo} atualizados.")
 
         elif opcao == "0":
             print("Encerrando o sistema...")
