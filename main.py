@@ -12,11 +12,12 @@ def menu():
     print("7 - Registrar Falta")
     print("8 - Exibir Turmas")
     print("9 - Exibir Alunos")
-    print("10 - Remover aluno")
-    print("11 - Remover disciplina")
-    print("12 - Remover turma")
-    print("13 - Atualizar dados do aluno")
-    print("14 - Atualizar dados da disciplina")
+    print("10 - Exibir Disciplinas")
+    print("11 - Remover Aluno")
+    print("12 - Remover Disciplina")
+    print("13 - Remover Turma")
+    print("14 - Atualizar Dados do Aluno")
+    print("15 - Atualizar Dados da Disciplina")
     print("0 - Sair")
     return input("Escolha uma opção: ")
 
@@ -88,6 +89,10 @@ def main():
                 aluno.exibir_aluno()
 
         elif opcao == "10":
+            for disciplina in system.disciplinas.values(): #Adicionado .values() para iterar sobre os valores do dicionário
+                disciplina.exibir_disciplina()
+
+        elif opcao == "11":
             matricula = input("Matrícula do aluno a ser removido: ")
             tipo_ensino = input("Tipo de Ensino (Fundamental/Médio): ")
             ano = input("Ano: ")
@@ -95,7 +100,7 @@ def main():
             system.remove_aluno(matricula, tipo_ensino, ano, turma)
             print(f"Aluno com matrícula {matricula} removido.")
 
-        elif opcao == "11":
+        elif opcao == "12":
             codigo = input("Código da disciplina a ser removida: ")
             tipo_ensino = input("Tipo de Ensino (Fundamental/Médio): ")
             ano = input("Ano: ")
@@ -103,21 +108,21 @@ def main():
             system.remove_disciplina(codigo, tipo_ensino, ano, turma)
             print(f"Disciplina com código {codigo} removida da turma {turma}.")
 
-        elif opcao == "12":
+        elif opcao == "13":
             tipo_ensino = input("Tipo de Ensino (Fundamental/Médio): ")
             ano = input("Ano: ")
             turma = input("Turma: ")
             system.remove_turma(tipo_ensino, ano, turma)
             print(f"Turma {turma} do ano {ano} removida.")
 
-        elif opcao == "13":
+        elif opcao == "14":
             matricula = input("Matrícula do aluno a ser atualizado: ")
             novo_nome = input("Novo nome: ")
             nova_idade = input("Nova idade: ")
             system.update_aluno(matricula, novo_nome if novo_nome else None, nova_idade if nova_idade else None)
             print(f"Dados do aluno com matrícula {matricula} atualizados.")
 
-        elif opcao == "14":
+        elif opcao == "15":
             codigo = input("Código da disciplina a ser atualizado: ")
             novo_nome = input("Novo nome: ")
             system.update_disciplina(codigo, novo_nome if novo_nome else None)
